@@ -30,26 +30,45 @@
 
     <div class="container mt-4">
         <!-- Video Section -->
-        <div id="videoSection" class="section active">
-            <h2>Video</h2>
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="video-container">
-                        <img id="video" src="" alt="Video Stream" class="img-fluid">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="mb-3">
-                        <label for="sourceSelect" class="form-label">Video Source</label>
-                        <select class="form-select" id="sourceSelect">
-                            <option value="">Select a source</option>
-                        </select>
-                    </div>
-                    <button id="startStream" class="btn btn-success">Run</button>
-                    <button id="stopStream" class="btn btn-danger" style="display: none;">Stop</button>
-                </div>
-            </div>
-        </div>
+		<div id="videoSection" class="section active">
+			<div class="video-container-wrapper">
+				<!-- Video Panel (80%) -->
+				<div class="video-panel">
+					<div class="video-wrapper">
+						<img id="video" src="" alt="Video Stream" class="video-frame">
+					</div>
+				</div>
+
+				<!-- Control Panel (20%) -->
+				<div class="control-panel">
+					<div class="control-content">
+						<div class="source-control mb-3">
+							<label for="sourceSelect" class="form-label">Video Source</label>
+							<select class="form-select mb-2" id="sourceSelect">
+								<option value="">Select a source</option>
+							</select>
+
+							<label for="frameRate" class="form-label">Frame Rate</label>
+							<input type="number" class="form-control mb-2" id="frameRate" 
+								   min="1" max="10" value="3">
+						</div>
+
+						<div class="stream-control">
+							<button id="startStream" class="btn btn-success w-100 mb-2">Run</button>
+							<button id="stopStream" class="btn btn-danger w-100" style="display: none;">Stop</button>
+						</div>
+						<div class="model-info mb-3">
+							<h5>Model</h5>
+							<div id="modelInfo">
+								<p>Path: <span id="modelPath"></span></p>
+								<p>Device: <span id="modelDevice"></span></p>
+								<p>Labels: <span id="modelLabels"></span></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
         <!-- Sources Section -->
         <div id="sourcesSection" class="section">

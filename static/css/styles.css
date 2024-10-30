@@ -6,6 +6,81 @@
     display: block;
 }
 
+
+.video-container-wrapper {
+    display: flex;
+    height: calc(100vh - 100px); /* Adjust based on your navbar height */
+    width: 100%;
+    margin-top: 10px;
+}
+
+.video-panel {
+    flex: 0 0 80%;
+    padding: 10px;
+    background: #000;
+}
+
+.video-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.video-frame {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.control-panel {
+    flex: 0 0 20%;
+    padding: 15px;
+    background: #f8f9fa;
+    border-left: 1px solid #dee2e6;
+}
+
+.control-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.model-info {
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #dee2e6;
+}
+
+.source-control, .stream-control {
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #dee2e6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .video-container-wrapper {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .video-panel, .control-panel {
+        flex: 0 0 100%;
+    }
+
+    .control-panel {
+        border-left: none;
+        border-top: 1px solid #dee2e6;
+    }
+}
+
+
+
 .list-group-item {
 	cursor: pointer;
 }

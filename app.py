@@ -83,14 +83,16 @@ def create_app(dataset_path):
         logging.info('Socket.IO: Client connected')
 
     @socketio.on('startStream')
-    def handle_start_stream(source_id):
-        logging.info(f'Socket.IO: Starting stream for source: {source_id}')
+    def handle_start_stream(data):
+        source_id = data.get('sourceId')
+        frame_rate = data.get('fps', 5)  # Default to 10 FPS
+        logging.info(f'Socket.IO: Starting stream for source: {source_id} at {frame_rate} FPS')
         if hasattr(app, 'stream_controller') and app.stream_controller is not None:
-            success = app.stream_controller.start_stream(source_id)
+            success = app.stream_controller.start_stream(source_id, frame_rate)
             logging.info(f'Stream start {"successful" if success else "failed"}')
         else:
             logging.error('No stream controller available')
-
+        
     @socketio.on('stopStream')
     def handle_stop_stream(source_id):
         logging.info(f'Socket.IO: Stopping stream for source: {source_id}')
