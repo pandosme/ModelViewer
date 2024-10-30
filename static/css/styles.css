@@ -1,0 +1,72 @@
+.section {
+    display: none;
+}
+
+.section.active {
+    display: block;
+}
+
+.list-group-item {
+	cursor: pointer;
+}
+.list-group-item:hover {
+	background-color: #f8f9fa;
+}
+
+.source-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+.source-actions {
+    margin-top: 10px;
+}
+
+.source-actions button {
+    margin-right: 5px;
+}
+
+#cameraFields {
+    border: 1px solid #dee2e6;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+.form-label {
+    font-weight: 500;
+}
+
+#imageContainer {
+    width: 100%;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+}
+
+#videoFrame {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.video-container {
+    width: 100%;
+    position: relative;
+    /* Remove fixed aspect ratio padding */
+    background: #000; /* Dark background for letterboxing */
+}
+
+.video-frame {
+    display: block;
+    max-width: 100%;
+    max-height: 70vh; /* Limit height to 70% of viewport height */
+    width: auto;
+    height: auto;
+    margin: 0 auto; /* Center the image */
+    object-fit: contain; /* Maintain aspect ratio */
+}
