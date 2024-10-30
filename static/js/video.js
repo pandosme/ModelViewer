@@ -11,9 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const videoFrame = document.getElementById('video');
     let currentStream = null;
 
-    // Load sources when page loads
-    loadVideoSources();
-
+    // Function to load sources into dropdown
     function loadVideoSources() {
         console.log('Loading video sources...');
         fetch('/api/sources')
@@ -22,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('Received sources:', sources);
                 videoSource.innerHTML = '<option value="">Select a source</option>';
                 sources.forEach(source => {
-                    if (source.type === 'camera') {
+                    if (source.type === 'camera') { // Only add camera sources
                         const option = document.createElement('option');
                         option.value = source._id;
                         option.textContent = source.name;
@@ -35,6 +33,9 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
+    // Load sources when page loads
+    loadVideoSources();
+
     // Stream control handlers
     startButton.addEventListener('click', function() {
         const sourceId = videoSource.value;
@@ -43,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         console.log('Starting stream for source:', sourceId);
-        socket.emit('startStream', sourceId);
+        socket.emit('startStream', sourceId);  // Send just the ID, not an object
         currentStream = sourceId;
         startButton.style.display = 'none';
         stopButton.style.display = 'block';
@@ -52,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
     stopButton.addEventListener('click', function() {
         if (currentStream) {
             console.log('Stopping stream for source:', currentStream);
-            socket.emit('stopStream', currentStream);
+            socket.emit('stopStream', currentStream);  // Send just the ID, not an object
             currentStream = null;
             startButton.style.display = 'block';
             stopButton.style.display = 'none';
