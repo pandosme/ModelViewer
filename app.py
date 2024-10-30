@@ -15,7 +15,7 @@ logging.basicConfig(
     format='%(asctime)s | %(levelname)s | %(message)s',
     datefmt='%Y-%m-%d %H:%M:%S',
     handlers=[
-        logging.StreamHandler()  # This ensures output goes to console
+        logging.StreamHandler()
     ]
 )
 
@@ -39,7 +39,7 @@ def load_model(model_path):
         logging.exception("Full traceback:")
         return None, None
 
-def create_app(dataset_path, skip_model_load=False):
+def create_app(dataset_path):
     app = Flask(__name__, 
                 static_folder='static',
                 template_folder='templates')
@@ -102,36 +102,35 @@ def create_app(dataset_path, skip_model_load=False):
     def handle_disconnect():
         logging.info('Socket.IO: Client disconnected')
 
-    if not skip_model_load:
-        # Verify dataset directory
-        if not os.path.isdir(dataset_path):
-            logging.error(f"Dataset directory not found: {dataset_path}")
-            return None
+    # Verify dataset directory
+    if not os.path.isdir(dataset_path):
+        logging.error(f"Dataset directory not found: {dataset_path}")
+        return None
 
-        # Check for required files
-        model_path = os.path.join(dataset_path, 'best.pt')
-        if not os.path.exists(model_path):
-            logging.error(f"Model file not found: {model_path}")
-            return None
+    # Check for required files
+    model_path = os.path.join(dataset_path, 'best.pt')
+    if not os.path.exists(model_path):
+        logging.error(f"Model file not found: {model_path}")
+        return None
 
-        # Load model
-        model, device = load_model(model_path)
-        if model is None:
-            return None
+    # Load model
+    model, device = load_model(model_path)
+    if model is None:
+        return None
 
-        # Load labels
-        labels_path = os.path.join(dataset_path, 'labels.txt')
-        if os.path.exists(labels_path):
-            with open(labels_path, 'r') as f:
-                labels = [line.strip() for line in f if line.strip()]
-                logging.info(f"Loaded {len(labels)} labels from labels.txt")
-        else:
-            logging.error("Labels file not found")
-            return None
+    # Load labels
+    labels_path = os.path.join(dataset_path, 'labels.txt')
+    if os.path.exists(labels_path):
+        with open(labels_path, 'r') as f:
+            labels = [line.strip() for line in f if line.strip()]
+            logging.info(f"Loaded {len(labels)} labels from labels.txt")
+    else:
+        logging.error("Labels file not found")
+        return None
 
-        # Initialize StreamController
-        app.stream_controller = StreamController(socketio, model, labels, device)
-        logging.info("StreamController initialized successfully")
+    # Initialize StreamController
+    app.stream_controller = StreamController(socketio, model, labels, device)
+    logging.info("StreamController initialized successfully")
 
     return app, socketio
 
@@ -139,11 +138,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Start YOLO validation server')
     parser.add_argument('dataset_path', help='Path to dataset directory containing best.pt and labels')
     args = parser.parse_args()
-
-    # Check if this is a reload
-    is_reload = os.environ.get('WERKZEUG_RUN_MAIN') == 'true'
     
-    result = create_app(args.dataset_path, skip_model_load=is_reload)
+    result = create_app(args.dataset_path)
     if result is None:
         logging.error("Failed to initialize application")
         exit(1)
@@ -156,7 +152,7 @@ if __name__ == '__main__':
             app,
             host=config['flask']['host'],
             port=config['flask']['port'],
-            debug=config['flask']['debug'],
+            debug=False,  # Debug mode disabled
             allow_unsafe_werkzeug=True
         )
     except Exception as e:

@@ -36,7 +36,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load sources when page loads
     loadVideoSources();
 
-    // Stream control handlers
     startButton.addEventListener('click', function() {
         const sourceId = videoSource.value;
         if (!sourceId) {
@@ -44,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         console.log('Starting stream for source:', sourceId);
-        socket.emit('startStream', sourceId);  // Send just the ID, not an object
+        socket.emit('startStream', sourceId);  // Send just the ID
         currentStream = sourceId;
         startButton.style.display = 'none';
         stopButton.style.display = 'block';
@@ -53,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
     stopButton.addEventListener('click', function() {
         if (currentStream) {
             console.log('Stopping stream for source:', currentStream);
-            socket.emit('stopStream', currentStream);  // Send just the ID, not an object
+            socket.emit('stopStream', currentStream);  // Send just the ID
             currentStream = null;
             startButton.style.display = 'block';
             stopButton.style.display = 'none';
@@ -61,7 +60,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Handle incoming frames
     socket.on('frame', function(frameData) {
         if (currentStream && videoFrame) {
             videoFrame.src = 'data:image/jpeg;base64,' + frameData;

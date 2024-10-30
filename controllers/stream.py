@@ -147,6 +147,7 @@ class StreamController:
                             logging.exception("Full traceback:")
                     
                     _, buffer = cv2.imencode('.jpg', frame)
+                    logging.debug(f"Emitting frame for source {source_id}")  # Add this debug line                    
                     frame_data = base64.b64encode(buffer).decode('utf-8')
                     stream['last_frame'] = now
                     return frame_data
