@@ -13,14 +13,10 @@ from controllers.stream import StreamController
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s | %(levelname)s | %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S',
-    handlers=[
-        logging.StreamHandler()  # This ensures output goes to console
-    ]
+    datefmt='%Y-%m-%d %H:%M:%S'
 )
 
 def load_model(model_path):
-    """Load YOLO model"""
     try:
         logging.info(f"Loading model from {model_path}")
         model = torch.hub.load('ultralytics/yolov5', 
@@ -91,11 +87,6 @@ def create_app(dataset_path, skip_model_load=False):
             logging.info(f'Stream start {"successful" if success else "failed"}')
         else:
             logging.error('No stream controller available')
-            # Initialize stream controller if needed
-            if not hasattr(app, 'stream_controller'):
-                app.stream_controller = StreamController(socketio, model, labels, device)
-                success = app.stream_controller.start_stream(source_id)
-                logging.info(f'Stream start {"successful" if success else "failed"}')
 
     @socketio.on('stopStream')
     def handle_stop_stream(source_id):
@@ -136,8 +127,8 @@ def create_app(dataset_path, skip_model_load=False):
             return None
 
         # Initialize StreamController
-        stream_controller = StreamController(socketio, model, labels, device)
-        app.stream_controller = stream_controller
+        app.stream_controller = StreamController(socketio, model, labels, device)
+        logging.info("StreamController initialized successfully")
 
     return app, socketio
 
